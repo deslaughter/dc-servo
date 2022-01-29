@@ -1,0 +1,3 @@
+[submodule "lib/Teensy-4.x-Quad-Encoder-Library"]
+	path = lib/Teensy-4.x-Quad-Encoder-Library
+	url = https://github.com/mjs513/Teensy-4.x-Quad-Encoder-Library.git
