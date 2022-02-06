@@ -70,7 +70,7 @@ struct Servo {
 
     Mode mode = ModeAuto;
     double sineFreq = 0;
-    double sineAmplitude = 0;
+    double sineAmp = 0;
 
     Servo(uint8_t num, uint8_t pinN1, uint8_t pinN2, uint8_t pinEna,
         uint8_t pinEncA, uint8_t pinEncB)
@@ -126,7 +126,7 @@ struct Servo {
             if (time > sineFreq) {
                 time -= sineFreq;
             }
-            ctrl = sineAmplitude * sin(2 * PI * sineFreq * time);
+            ctrl = sineAmp * sin(2 * PI * sineFreq * time);
             break;
         }
 
@@ -164,7 +164,7 @@ struct Servo {
     void setModeSine(double amplitude, double frequency)
     {
         mode = ModeSine;
-        sineAmplitude = amplitude;
+        sineAmp = amplitude;
         sineFreq = frequency;
         time = 0;
     }
