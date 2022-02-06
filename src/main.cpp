@@ -114,27 +114,27 @@ void auxLoop(void)
             if (pwm > 0) {
                 servo.setPWMFrequency(pwm);
                 Serial.print("  Set PWM frequency = ");
-                Serial.println(pwm);
+                Serial.println(servo.pwmFrequency);
             }
 
             if (steps != 0) {
                 servo.step(steps);
                 Serial.print("  Set steps = ");
-                Serial.println(steps);
+                Serial.println(servo.setpoint);
             }
 
             if ((-1 <= ctrl) && (ctrl <= 1)) {
                 servo.setModeCtrl(ctrl);
                 Serial.print("  Set ctrl = ");
-                Serial.println(ctrl);
+                Serial.println(servo.ctrl);
             }
 
             if ((sineA != 0) || (sineF != 0)) {
                 servo.setModeSine(sineA, sineF);
                 Serial.print("  Set sine amplitude = ");
-                Serial.println(sineA);
+                Serial.println(servo.sineAmp);
                 Serial.print("  Set sine frequency = ");
-                Serial.println(sineF);
+                Serial.println(servo.sineFreq);
             }
 
             // If log specified set flag
