@@ -50,7 +50,7 @@ struct PID {
 
 struct Servo {
     const uint8_t num;
-    const uint8_t pinN1, pinN2, pinPWM;
+    const uint8_t pinN1, pinN2, pinEna;
     QuadEncoder enc;
 
     uint16_t pwmFrequency = 9500;
@@ -72,12 +72,12 @@ struct Servo {
     double sineFreq = 0;
     double sineAmplitude = 0;
 
-    Servo(uint8_t num, uint8_t pinN1, uint8_t pinN2, uint8_t pinPWM,
+    Servo(uint8_t num, uint8_t pinN1, uint8_t pinN2, uint8_t pinEna,
         uint8_t pinEncA, uint8_t pinEncB)
         : num(num)
         , pinN1(pinN1)
         , pinN2(pinN2)
-        , pinPWM(pinPWM)
+        , pinEna(pinEna)
         , enc(num, pinEncA, pinEncB, 1)
     {
     }
@@ -87,15 +87,19 @@ struct Servo {
         // Set servo control pin modes
         pinMode(pinN1, OUTPUT);
         pinMode(pinN2, OUTPUT);
-        pinMode(pinPWM, OUTPUT);
+        pinMode(pinEna, OUTPUT);
 
-        // Set PWM frequency and resolution
+        // Set PWM resolution and frequency
         analogWriteResolution(pwmResolution);
-        analogWriteFrequency(pinPWM, pwmFrequency);
+        analogWriteFrequency(pinN1, pwmFrequency);
+        analogWriteFrequency(pinN2, pwmFrequency);
 
         // Initialize encoder
         enc.setInitConfig();
         enc.init();
+
+        // Enable motor output
+        digitalWrite(pinEna, HIGH);
 
         // Print servo initialization message
         Serial.print("Servo ");
@@ -135,17 +139,14 @@ struct Servo {
 
         // Output control to motor driver
         if (ctrl > 0) {
-            digitalWrite(pinN1, HIGH);
-            digitalWrite(pinN2, LOW);
-            analogWrite(pinPWM, (pwmMaxValue * ctrl));
+            analogWrite(pinN1, (pwmMaxValue * ctrl));
+            analogWrite(pinN2, 0);
         } else if (ctrl < 0) {
-            digitalWrite(pinN1, LOW);
-            digitalWrite(pinN2, HIGH);
-            analogWrite(pinPWM, (pwmMaxValue * -ctrl));
+            analogWrite(pinN1, 0);
+            analogWrite(pinN2, (pwmMaxValue * -ctrl));
         } else {
-            digitalWrite(pinN1, HIGH);
-            digitalWrite(pinN2, HIGH);
-            analogWrite(pinPWM, 0);
+            analogWrite(pinN1, 0);
+            analogWrite(pinN2, 0);
         }
     }
 
@@ -170,7 +171,8 @@ struct Servo {
 
     void setPWMFrequency(uint32_t pwmFrequency)
     {
-        analogWriteFrequency(pinPWM, pwmFrequency);
+        analogWriteFrequency(pinN1, pwmFrequency);
+        analogWriteFrequency(pinN2, pwmFrequency);
     }
 
     void setKp(double kp)
