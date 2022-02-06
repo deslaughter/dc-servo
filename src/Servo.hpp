@@ -9,7 +9,7 @@
 // Control Cycles
 //------------------------------------------------------------------------------
 
-const uint32_t cyclesPerSecond = 100;
+const uint32_t cyclesPerSecond = 1000;
 const uint32_t ctrlTimeMicros = 1000000 / cyclesPerSecond; // microseconds
 
 //------------------------------------------------------------------------------
